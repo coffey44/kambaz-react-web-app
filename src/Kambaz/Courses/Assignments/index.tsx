@@ -1,7 +1,15 @@
 import { FaSearch, FaPlus } from "react-icons/fa";
+import { useParams, Link } from "react-router-dom";
+import db from "../../Database";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 export default function Assignments() {
+  const { cid } = useParams();
+  
+  const assignments = db.assignments.filter(
+    (assignment: any) => assignment.course === cid
+  );
+console.log("cid:", cid, "assignments:", assignments);
   return (
     <div id="assignments" className="p-4">
       <div className="d-flex align-items-center mb-4">
@@ -39,47 +47,19 @@ export default function Assignments() {
       </h3>
 
       <ul id="assignment-list" className="list-unstyled">
-        <li className="assignment-item mb-4 border-start border-4 border-success ps-3 py-2 bg-white shadow-sm">
-          <a
-            href="#/Kambaz/Courses/1234/Assignments/123"
-            className="assignment-link fw-bold fs-5 text-danger text-decoration-none"
+        {assignments.map((assignment: any) => (
+          <li
+            key={assignment._id}
+            className="assignment-item mb-4 border-start border-4 border-success ps-3 py-2 bg-white shadow-sm"
           >
-            A1 - ENV + HTML
-          </a>
-          <div className="text-secondary small mt-1">
-            Multiple Modules | <b>Not available until</b> May 6 at 12:00am |
-            <br />
-            <b>Due</b> May 13 at 11:59pm | 100 pts
-          </div>
-        </li>
-
-        <li className="assignment-item mb-4 border-start border-4 border-success ps-3 py-2 bg-white shadow-sm">
-          <a
-            href="#/Kambaz/Courses/1234/Assignments/124"
-            className="assignment-link fw-bold fs-5 text-danger text-decoration-none"
-          >
-            A2 - CSS + BOOTSTRAP
-          </a>
-          <div className="text-secondary small mt-1">
-            Multiple Modules | <b>Not available until</b> May 13 at 12:00am |
-            <br />
-            <b>Due</b> May 20 at 11:59pm | 100 pts
-          </div>
-        </li>
-
-        <li className="assignment-item mb-4 border-start border-4 border-success ps-3 py-2 bg-white shadow-sm">
-          <a
-            href="#/Kambaz/Courses/1234/Assignments/125"
-            className="assignment-link fw-bold fs-5 text-danger text-decoration-none"
-          >
-            A3 - JAVASCRIPT + REACT
-          </a>
-          <div className="text-secondary small mt-1">
-            Multiple Modules | <b>Not available until</b> May 20 at 12:00am |
-            <br />
-            <b>Due</b> May 27 at 11:59pm | 100 pts
-          </div>
-        </li>
+            <Link
+              to={`/Kambaz/Courses/${cid}/Assignments/${assignment._id}`}
+              className="assignment-link fw-bold fs-5 text-danger text-decoration-none"
+            >
+              {assignment.title}
+            </Link>
+          </li>
+        ))}
       </ul>
     </div>
   );

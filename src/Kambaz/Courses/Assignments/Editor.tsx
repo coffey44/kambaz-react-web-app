@@ -1,12 +1,25 @@
 import { Form, Button, Row, Col } from "react-bootstrap";
+import { useParams, Link } from "react-router-dom";
+import db from "../../Database";
 
 export default function AssignmentEditor() {
+  const { cid, aid } = useParams();
+  const assignment = db.assignments.find(
+    (a: any) => a._id === aid && a.course === cid
+  );
+
+  const title = assignment?.title || "";
+  const description = assignment?.description || "";
+  const points = assignment?.points || "";
+  const dueDate = assignment?.dueDate || "";
+  const availableDate = assignment?.availableDate || "";
+
   return (
     <div id="wd-assignments-editor" className="p-4" style={{ maxWidth: 700 }}>
       <Form>
         <Form.Group className="mb-3" controlId="wd-name">
           <Form.Label>Assignment Name</Form.Label>
-          <Form.Control type="text" defaultValue="A1 - ENV + HTML" />
+          <Form.Control type="text" defaultValue={title} />
         </Form.Group>
 
         <Form.Group className="mb-3" controlId="wd-description">
@@ -14,7 +27,7 @@ export default function AssignmentEditor() {
           <Form.Control
             as="textarea"
             rows={3}
-            defaultValue="The assignment is available online Submit a link to the landing page of your Web application running on Netlify..."
+            defaultValue={description}
           />
         </Form.Group>
 
@@ -22,7 +35,7 @@ export default function AssignmentEditor() {
           <Col md={6}>
             <Form.Group controlId="wd-points">
               <Form.Label>Points</Form.Label>
-              <Form.Control type="number" defaultValue={100} />
+              <Form.Control type="number" defaultValue={points} />
             </Form.Group>
           </Col>
           <Col md={6}>
@@ -65,26 +78,30 @@ export default function AssignmentEditor() {
           <Row>
             <Col md={4}>
               <Form.Label>Due</Form.Label>
-              <Form.Control type="date" defaultValue="2024-05-13" className="mb-2" />
+              <Form.Control type="date" defaultValue={dueDate} className="mb-2" />
             </Col>
             <Col md={4}>
               <Form.Label>Available from</Form.Label>
-              <Form.Control type="date" defaultValue="2024-05-06" className="mb-2" />
+              <Form.Control type="date" defaultValue={availableDate} className="mb-2" />
             </Col>
             <Col md={4}>
               <Form.Label>Until</Form.Label>
-              <Form.Control type="date" defaultValue="2024-05-28" className="mb-2" />
+              <Form.Control type="date" defaultValue="" className="mb-2" />
             </Col>
           </Row>
         </Form.Group>
 
         <div className="mt-4">
-          <Button variant="secondary" className="me-2">
-            Cancel
-          </Button>
-          <Button variant="danger">
-            Save
-          </Button>
+          <Link to={`/Kambaz/Courses/${cid}/Assignments`}>
+            <Button variant="secondary" className="me-2">
+              Cancel
+            </Button>
+          </Link>
+          <Link to={`/Kambaz/Courses/${cid}/Assignments`}>
+            <Button variant="danger">
+              Save
+            </Button>
+          </Link>
         </div>
       </Form>
     </div>
