@@ -2,17 +2,29 @@ import { Form, Button, Row, Col } from "react-bootstrap";
 import { useParams, Link } from "react-router-dom";
 import db from "../../Database";
 
+// Define a type for assignment to help TypeScript understand the shape
+type Assignment = {
+  _id: string;
+  course: string;
+  title?: string;
+  description?: string;
+  points?: number | string;
+  dueDate?: string;
+  availableDate?: string;
+};
+
 export default function AssignmentEditor() {
   const { cid, aid } = useParams();
+  // Tell TypeScript the type of assignment
   const assignment = db.assignments.find(
     (a: any) => a._id === aid && a.course === cid
-  );
+  ) as Assignment | undefined;
 
-  const title = assignment?.title || "";
-  const description = assignment?.description || "";
-  const points = assignment?.points || "";
-  const dueDate = assignment?.dueDate || "";
-  const availableDate = assignment?.availableDate || "";
+  const title = assignment?.title ?? "";
+  const description = assignment?.description ?? "";
+  const points = assignment?.points ?? "";
+  const dueDate = assignment?.dueDate ?? "";
+  const availableDate = assignment?.availableDate ?? "";
 
   return (
     <div id="wd-assignments-editor" className="p-4" style={{ maxWidth: 700 }}>
