@@ -9,5 +9,6 @@ export default function AccountNavigation() {
       <Link to="/Kambaz/Calendar" id="wd-calendar-link">Calendar</Link><br/>
       <Link to="/Kambaz/Inbox" id="wd-inbox-link">Inbox</Link><br/>
       <Link to="/Labs" id="wd-labs-link">Labs</Link><br/>
+      <Link to="/Kambaz/Account/Profile">Profile</Link>
     </div>
 );}
