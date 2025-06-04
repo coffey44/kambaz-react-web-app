@@ -4,4 +4,6 @@ import assignments from "./assignments.json";
 import users from "./users.json";
 import enrollments from "./enrollments.json";
 export default {
-  courses, modules, assignments, users, enrollments, };
+  courses, modules, assignments, users, enrollments };
+
+
