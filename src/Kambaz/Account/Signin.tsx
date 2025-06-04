@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { setCurrentUser } from "./Reducer";
+import { setCurrentUser } from "./reducer";
 import { useDispatch } from "react-redux";
 import db from "../Database";
 import FormControl from "react-bootstrap/FormControl";
