@@ -2,7 +2,6 @@ import { Form, Button, Row, Col } from "react-bootstrap";
 import { useParams, Link } from "react-router-dom";
 import db from "../../Database";
 
-// Define a type for assignment to help TypeScript understand the shape
 type Assignment = {
   _id: string;
   course: string;
@@ -15,7 +14,6 @@ type Assignment = {
 
 export default function AssignmentEditor() {
   const { cid, aid } = useParams();
-  // Tell TypeScript the type of assignment
   const assignment = db.assignments.find(
     (a: any) => a._id === aid && a.course === cid
   ) as Assignment | undefined;
