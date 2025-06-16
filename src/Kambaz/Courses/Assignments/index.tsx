@@ -1,9 +1,39 @@
+import { Button, Form, InputGroup } from 'react-bootstrap';
+import { BsGripVertical } from 'react-icons/bs';
+import { CiSearch } from "react-icons/ci";
+import { FaPlus } from 'react-icons/fa';
+
+
 export default function Assignments() {
   return (
-    <div id="wd-assignments">
-      <input placeholder="Search for Assignments" id="wd-search-assignment" />
-      <button id="wd-add-assignment-group">+ Group</button>
-      <button id="wd-add-assignment">+ Assignment</button>
+    <div id="wd-assignments" className="text-nowrap">
+      <div id="wd-assignments-controls" className="d-flex gap-2 mb-3">
+          <div style={{ flex: 2 }}>
+            <InputGroup size="lg">
+              <InputGroup.Text id="wd-search-assignment">
+                <CiSearch />
+              </InputGroup.Text>
+              <Form.Control
+                size="lg"
+                type="text"
+                placeholder="Search"
+                id="wd-search-assignment"
+              />
+            </InputGroup>
+          </div>
+
+          <div style={{ flex: 1 }}>
+            <Button variant="secondary" size="lg" id="wd-add-assignment-group" className="w-100">
+              <FaPlus className="position-relative me-2" style={{ bottom: "1px" }} /> Group
+            </Button>
+          </div>
+
+          <div style={{ flex: 1 }}>
+            <Button variant="danger" size="lg" id="wd-add-assignment" className="w-100">
+              <FaPlus className="position-relative me-2" style={{ bottom: "1px" }} /> Assignment
+            </Button>
+          </div>
+        </div>
 
       <h3 id="wd-assignments-title">
         ASSIGNMENTS 40% of Total <button>+</button>
