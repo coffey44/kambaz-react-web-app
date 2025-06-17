@@ -1,93 +1,78 @@
+import { Button, Form, Row, Col } from "react-bootstrap";
+import { Link, useParams } from "react-router-dom";
+import * as db from "../../Database";
+
 export default function AssignmentEditor() {
+  const { cid, aid } = useParams();
+
+  const assignment = db.assignments.find((a: any) => a._id === aid);
+
+  const title = assignment?.title || "";
+  const description = assignment?._id || "";
+  const points = assignment?.course ?? 100;
+
   return (
-    <div id="wd-assignments-editor">
-      <label htmlFor="wd-name">Assignment Name</label><br />
-      <input id="wd-name" value="A1 - ENV + HTML" /><br /><br />
+    <div className="p-4" style={{ maxWidth: 700, margin: "0 auto" }}>
+      <Form>
+        <Form.Group className="mb-3" controlId="assignmentName">
+          <Form.Label>Assignment Name</Form.Label>
+          <Form.Control type="text" defaultValue={title} />
+        </Form.Group>
 
-      <textarea id="wd-description">
-        The assignment is available online Submit a link to the landing page of your Web application running on Netlify...
-      </textarea>
-      <br />
+        <Form.Group className="mb-3" controlId="assignmentDescription">
+          <Form.Control
+            as="textarea"
+            rows={7}
+            defaultValue={description}
+            style={{ fontSize: "1rem" }}
+          />
+        </Form.Group>
 
-      <table>
-        <tbody>
-          <tr>
-            <td align="right" valign="top">
-              <label htmlFor="wd-points">Points</label>
-            </td>
-            <td>
-              <input id="wd-points" value={100} />
-            </td>
-          </tr>
-          <tr>
-            <td align="right" valign="top">
-              <label htmlFor="wd-group">Assignment Group</label>
-            </td>
-            <td>
-              <select id="wd-group">
-                <option>ASSIGNMENTS</option>
-              </select>
-            </td>
-          </tr>
-          <tr>
-            <td align="right" valign="top">
-              <label htmlFor="wd-display-grade-as">Display Grade as</label>
-            </td>
-            <td>
-              <select id="wd-display-grade-as">
-                <option>Percentage</option>
-              </select>
-            </td>
-          </tr>
-          <tr>
-            <td align="right" valign="top">
-              <label htmlFor="wd-submission-type">Submission Type</label>
-            </td>
-            <td>
-              <select id="wd-submission-type">
-                <option>Online</option>
-              </select>
-              <br />
-              <label htmlFor="wd-text-entry">
-                <input type="checkbox" id="wd-text-entry" /> Text Entry
-              </label><br />
-              <label htmlFor="wd-website-url">
-                <input type="checkbox" id="wd-website-url" /> Website URL
-              </label><br />
-              <label htmlFor="wd-media-recordings">
-                <input type="checkbox" id="wd-media-recordings" /> Media Recordings
-              </label><br />
-              <label htmlFor="wd-student-annotation">
-                <input type="checkbox" id="wd-student-annotation" /> Student Annotation
-              </label><br />
-              <label htmlFor="wd-file-upload">
-                <input type="checkbox" id="wd-file-upload" /> File Uploads
-              </label>
-            </td>
-          </tr>
-          <tr>
-            <td align="right" valign="top">
-              <label htmlFor="wd-assign-to">Assign</label>
-            </td>
-            <td>
-              <label htmlFor="wd-assign-to">Assign to</label><br />
-              <input id="wd-assign-to" value="Everyone" /><br /><br />
+        <Form.Group className="mb-3" controlId="assignmentPoints">
+          <Form.Label>Points</Form.Label>
+          <Form.Control type="number" defaultValue={points} />
+        </Form.Group>
 
-              <label htmlFor="wd-due-date">Due</label><br />
-              <input type="date" id="wd-due-date" value="2024-05-13" /><br /><br />
+        <Form.Label className="mb-2">Assign</Form.Label>
+        <Row className="mb-3">
+          <Col md={6}>
+            <Form.Group controlId="assignTo">
+              <Form.Label>Assign to</Form.Label>
+              <Form.Control type="text" defaultValue="Everyone" />
+            </Form.Group>
+          </Col>
+          <Col md={3}>
+            <Form.Group controlId="dueDate">
+              <Form.Label>Due</Form.Label>
+              <Form.Control
+                type="datetime-local"
+                defaultValue={""}
+              />
+            </Form.Group>
+          </Col>
+          <Col md={3}>
+            <Form.Group controlId="availableFrom">
+              <Form.Label>Available from</Form.Label>
+              <Form.Control
+                type="datetime-local"
+                defaultValue={""}
+              />
+            </Form.Group>
+          </Col>
+        </Row>
 
-              <label htmlFor="wd-available-from">Available from</label>
-              <input type="date" id="wd-available-from" value="2024-05-06" />
-              <label htmlFor="wd-available-until">Until</label>
-              <input type="date" id="wd-available-until" value="2024-05-28" />
-            </td>
-          </tr>
-        </tbody>
-      </table>
 
-      <br />
-      <button>Cancel</button>
-      <button>Save</button>
+        <div className="d-flex justify-content-end gap-2 mt-4">
+          <Link to={`/Kambaz/Courses/${cid}/Assignments`}>
+            <Button variant="secondary">Cancel</Button>
+          </Link>
+          <Link to={`/Kambaz/Courses/${cid}/Assignments`}>
+            <Button variant="danger" type="button">
+              Save
+            </Button>
+          </Link>
+        </div>
+      </Form>
     </div>
   );
 }
