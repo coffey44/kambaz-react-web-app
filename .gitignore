@@ -1,5 +1,7 @@
 .idea
 node_modules
+.env.local
+.env
 
 # Logs
 logs

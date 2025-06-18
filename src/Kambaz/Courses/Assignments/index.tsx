@@ -1,17 +1,49 @@
-import { Button, Form, InputGroup, ListGroup } from 'react-bootstrap';
+import { useEffect, useState } from "react";
+import { Button, Form, InputGroup, ListGroup, Modal } from 'react-bootstrap';
 import { BsGripVertical } from 'react-icons/bs';
 import { CiSearch } from "react-icons/ci";
-import { FaPlus } from 'react-icons/fa';
+import { FaPlus, FaTrash } from 'react-icons/fa';
 import { IoMdArrowDropdown } from "react-icons/io";
 import AssignmentControlButtons from './AssignmentControlButtons';
 import { FaCalendarCheck } from "react-icons/fa6";
 import LessonControlButtons from "../Modules/LessonControlButtons"
-import { Link, useParams } from 'react-router-dom';
-import * as db from "../../Database";
+import { Link, useParams, useNavigate } from 'react-router-dom';
+import * as assignmentClient from "./client";
 
 export default function Assignments() {
   const { cid } = useParams();
-  const assignments = db.assignments.filter((a: any) => a.course === cid);
+  const navigate = useNavigate();
+  const [assignments, setAssignments] = useState<any[]>([]);
+  const [showDelete, setShowDelete] = useState(false);
+  const [assignmentToDelete, setAssignmentToDelete] = useState<any>(null);
+
+  const fetchAssignments = async () => {
+    const all = await assignmentClient.findAllAssignments();
+    setAssignments(all.filter((a: any) => a.course === cid));
+  };
+
+  useEffect(() => {
+    fetchAssignments();
+  }, [cid]);
+
+  const handleDeleteClick = (assignment: any) => {
+    setAssignmentToDelete(assignment);
+    setShowDelete(true);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (assignmentToDelete) {
+      await assignmentClient.deleteAssignment(assignmentToDelete._id);
+      setAssignments(assignments.filter(a => a._id !== assignmentToDelete._id));
+    }
+    setShowDelete(false);
+    setAssignmentToDelete(null);
+  };
+
+  const handleCancelDelete = () => {
+    setShowDelete(false);
+    setAssignmentToDelete(null);
+  };
 
   return (
     <div id="wd-assignments-title" className="text-nowrap">
@@ -35,7 +67,13 @@ export default function Assignments() {
           </Button>
         </div>
         <div style={{ flex: 0.5 }}>
-          <Button variant="danger" size="lg" id="wd-add-assignment" className="w-100">
+          <Button
+            variant="danger"
+            size="lg"
+            id="wd-add-assignment"
+            className="w-100"
+            onClick={() => navigate(`/Kambaz/Courses/${cid}/Assignments/new`)}
+          >
             <FaPlus className="position-relative me-2" style={{ bottom: "1px" }} /> Assignment
           </Button>
         </div>
@@ -65,7 +103,15 @@ export default function Assignments() {
                         <span>Assignment ID: {assignment._id}</span>
                       </div>
                     </div>
-                    <div className="ms-auto">
+                    <div className="ms-auto d-flex align-items-center">
+                      <Button
+                        variant="link"
+                        className="text-danger p-0 ms-2"
+                        title="Delete Assignment"
+                        onClick={() => handleDeleteClick(assignment)}
+                      >
+                        <FaTrash />
+                      </Button>
                       <LessonControlButtons />
                     </div>
                   </div>
@@ -75,6 +121,23 @@ export default function Assignments() {
           </ListGroup.Item>
         </ListGroup>
       </div>
+      <Modal show={showDelete} onHide={handleCancelDelete} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>Delete Assignment</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          Are you sure you want to delete the assignment{' '}
+          <strong>{assignmentToDelete?.title}</strong>?
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCancelDelete}>
+            Cancel
+          </Button>
+          <Button variant="danger" onClick={handleConfirmDelete}>
+            Delete
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 }
